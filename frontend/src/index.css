@@ -1,0 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Poppins:wght@400;500&display=swap");
+@import "tailwindcss";
+@plugin "daisyui";
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+/* Light theme (default) */
+@theme {
+  --color-bg: #ffffff;
+  --color-text: #111111;
+  --color-primary: #2563eb; /* blue-600 */
+}
+
+/* Dark theme */
+html.dark {
+  --color-bg: #111111;
+  --color-text: #eeeeee;
+  --color-primary: #38bdf8; /* sky-400 */
+}
