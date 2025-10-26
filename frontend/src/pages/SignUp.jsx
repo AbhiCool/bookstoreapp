@@ -7,6 +7,7 @@ import { AppContext } from "../context/AppProvider";
 import { serverURL } from "../utils/constants";
 
 const SignUp = ({ showLogin, setShowLogin }) => {
+  const [loading, setLoading] = useState(false);
   const { setUser } = useContext(AppContext);
   const {
     register,
@@ -18,6 +19,7 @@ const SignUp = ({ showLogin, setShowLogin }) => {
 
   const handleFormSubmit = async (data) => {
     console.log("Form data:", data);
+    setLoading(true);
 
     try {
       const res = await axios.post(serverURL + "/api/auth/signup", data);
@@ -30,6 +32,8 @@ const SignUp = ({ showLogin, setShowLogin }) => {
     } catch (error) {
       console.log(error.response.data);
       toast.error(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -93,7 +97,9 @@ const SignUp = ({ showLogin, setShowLogin }) => {
                 )}
 
                 <div className="w-full flex justify-around items-center mt-4">
-                  <button className="btn btn-secondary">Signup</button>
+                  <button className="btn btn-secondary" disabled={loading}>
+                    {loading ? "Please wait..." : "Signup"}
+                  </button>
                   <span className="text-md">
                     Already registered?{" "}
                     <Link

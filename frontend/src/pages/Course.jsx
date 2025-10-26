@@ -5,24 +5,47 @@ import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import { serverURL } from "../utils/constants";
+import SkeletonCard from "../components/SkeletonCard";
 
 const Course = () => {
   const navigate = useNavigate();
 
   const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchBooks = async () => {
+      setLoading(true);
       try {
         const res = await axios.get(serverURL + "/api/book");
 
         setBooks(res.data);
       } catch (err) {
         console.log(err);
+      } finally {
+        setLoading(false);
       }
     };
     fetchBooks();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen container mx-auto md:px-20 px-4">
+        <div className="mt-28 flex flex-col items-center justify-center gap-2">
+          <div className="skeleton skeleton-text short"></div>
+          <div className="skeleton skeleton-text w-full"></div>
+          <div className="skeleton skeleton-text w-full"></div>
+          <div className="skeleton skeleton-text w-full"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {Array.from({ length: 8 }).map((_, index) => (
+              <SkeletonCard key={index} />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen container mx-auto md:px-20 px-4">
@@ -45,7 +68,7 @@ const Course = () => {
       {!books.length ? (
         <h1 className="text-center text-2xl mt-10">No books found</h1>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-center justify-center gap-8">
           {books.map((book) => (
             <Card key={book.id} book={book}></Card>
           ))}

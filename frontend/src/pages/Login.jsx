@@ -8,6 +8,7 @@ import { serverURL } from "../utils/constants";
 const Login = ({ setShowLogin }) => {
   const { setUser } = useContext(AppContext);
 
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -17,6 +18,7 @@ const Login = ({ setShowLogin }) => {
   const handleFormSubmit = async (data) => {
     console.log("Form data:", data);
 
+    setLoading(true);
     try {
       const res = await axios.post(serverURL + "/api/auth/login", data);
 
@@ -30,6 +32,8 @@ const Login = ({ setShowLogin }) => {
     } catch (error) {
       console.log(error.response.data);
       toast.error(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,7 +82,9 @@ const Login = ({ setShowLogin }) => {
           )}
         </div>
         <div className="flex justify-around items-center">
-          <button className="btn btn-secondary">Login</button>
+          <button className="btn btn-secondary" disabled={loading}>
+            {loading ? "Please wait..." : "Login"}
+          </button>
           <p>
             Not registered yet?{" "}
             <Link

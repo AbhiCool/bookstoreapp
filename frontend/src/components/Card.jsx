@@ -3,8 +3,11 @@ import React from "react";
 const Card = ({ book }) => {
   return (
     <>
-      <div className="m-2 p-3 hover:scale-105 duration-300 transition-all">
-        <div className="card bg-base-100 shadow-sm border border-base-content">
+      <div className="m-2 p-3 hover:scale-105 duration-300 transition-all w-full">
+        <div
+          style={{ width: "100%" }}
+          className="card bg-base-100 shadow-sm border border-base-content"
+        >
           <figure>
             <img src={book.image} alt="book" />
           </figure>
