@@ -6,6 +6,7 @@ import Card from "./Card";
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
+import { serverURL } from "../utils/constants";
 
 const FreeBook = () => {
   const [books, setBooks] = useState([]);
@@ -13,7 +14,7 @@ const FreeBook = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/book");
+        const res = await axios.get(serverURL + "/api/book");
 
         setBooks(res.data);
       } catch (err) {

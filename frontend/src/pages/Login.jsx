@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { AppContext } from "../context/AppProvider";
+import { serverURL } from "../utils/constants";
 const Login = ({ setShowLogin }) => {
   const { setUser } = useContext(AppContext);
 
@@ -17,10 +18,7 @@ const Login = ({ setShowLogin }) => {
     console.log("Form data:", data);
 
     try {
-      const res = await axios.post(
-        "http://localhost:3000/api/auth/login",
-        data
-      );
+      const res = await axios.post(serverURL + "/api/auth/login", data);
 
       console.log(res.data);
       toast.success(res.data.message);

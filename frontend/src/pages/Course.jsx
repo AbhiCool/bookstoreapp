@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
+import { serverURL } from "../utils/constants";
 
 const Course = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Course = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/book");
+        const res = await axios.get(serverURL + "/api/book");
 
         setBooks(res.data);
       } catch (err) {
