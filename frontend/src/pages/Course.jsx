@@ -1,9 +1,28 @@
 import React from "react";
-import list from "../list.json";
 import Card from "../components/Card";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
+
 const Course = () => {
   const navigate = useNavigate();
+
+  const [books, setBooks] = useState([]);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/api/book");
+
+        setBooks(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchBooks();
+  }, []);
+
   return (
     <div className="min-h-screen container mx-auto md:px-20 px-4">
       <div className="mt-28 flex flex-col items-center justify-center gap-8">
@@ -22,11 +41,15 @@ const Course = () => {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
-        {list.map((book) => (
-          <Card key={book.id} book={book}></Card>
-        ))}
-      </div>
+      {!books.length ? (
+        <h1 className="text-center text-2xl mt-10">No books found</h1>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+          {books.map((book) => (
+            <Card key={book.id} book={book}></Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

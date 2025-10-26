@@ -1,16 +1,38 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { AppContext } from "../context/AppProvider";
 const Login = ({ setShowLogin }) => {
+  const { setUser } = useContext(AppContext);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const handleFormSubmit = (data) => {
+  const handleFormSubmit = async (data) => {
     console.log("Form data:", data);
+
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/auth/login",
+        data
+      );
+
+      console.log(res.data);
+      toast.success(res.data.message);
+      localStorage.setItem("Users", JSON.stringify(res.data.user));
+
+      setUser(res.data.user);
+
+      setShowLogin(false);
+    } catch (error) {
+      console.log(error.response.data);
+      toast.error(error.response.data.message);
+    }
   };
 
   console.log("errors", errors);

@@ -22,3 +22,7 @@ html.dark {
   --color-text: #eeeeee;
   --color-primary: #38bdf8; /* sky-400 */
 }
+
+input {
+  @apply outline-none;
+}

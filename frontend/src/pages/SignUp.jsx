@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { AppContext } from "../context/AppProvider";
 
 const SignUp = ({ showLogin, setShowLogin }) => {
+  const { setUser } = useContext(AppContext);
   const {
     register,
     handleSubmit,
@@ -10,14 +14,25 @@ const SignUp = ({ showLogin, setShowLogin }) => {
   } = useForm();
 
   const navigate = useNavigate();
-  const [registerFormData, setRegisterFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
 
-  const handleFormSubmit = (data) => {
+  const handleFormSubmit = async (data) => {
     console.log("Form data:", data);
+
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/auth/signup",
+        data
+      );
+
+      console.log(res.data);
+      setUser(res.data.user);
+      toast.success(res.data.message);
+
+      navigate("/");
+    } catch (error) {
+      console.log(error.response.data);
+      toast.error(error.response.data.message);
+    }
   };
 
   return (
