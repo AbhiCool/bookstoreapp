@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { AppContext } from "../context/AppProvider";
 import { serverURL } from "../utils/constants";
+import axiosInstance from "../utils/axiosInstance";
 
 const SignUp = ({ showLogin, setShowLogin }) => {
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ const SignUp = ({ showLogin, setShowLogin }) => {
     setLoading(true);
 
     try {
-      const res = await axios.post(serverURL + "/api/auth/signup", data);
+      const res = await axiosInstance.post("/api/auth/signup", data);
 
       console.log(res.data);
       setUser(res.data.user);

@@ -1,6 +1,8 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import axiosInstance from "../utils/axiosInstance";
 
 const Contact = () => {
   const {
@@ -11,8 +13,19 @@ const Contact = () => {
 
   const navigate = useNavigate();
 
-  const handleFormSubmit = (data) => {
+  const handleFormSubmit = async (data) => {
     console.log("Form data:", data);
+
+    try {
+      const res = await axiosInstance.post("/api/contactus", data);
+
+      toast.success(res.data.message);
+
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
   };
 
   return (

@@ -1,8 +1,16 @@
 const UserModel = require("../models/User.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const cookieOptions = {
+  maxAge: 24 * 60 * 60 * 1000,
+  httpOnly: true,
+  sameSite: "lax",
+  secure: process.env.NODE_ENV === "production",
+};
 exports.login = async (req, res, next) => {
   try {
+    console.log("In login");
+    console.log(req.body);
     const { email, password } = req.body;
 
     const user = await UserModel.findOne({ email });
@@ -22,17 +30,17 @@ exports.login = async (req, res, next) => {
       });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-
     delete user.password;
+
+    setCookie(res, user);
 
     res.status(200).json({
       success: true,
       message: "User logged in successfully",
       user,
-      token,
     });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
@@ -57,6 +65,8 @@ exports.signup = async (req, res, next) => {
 
     delete newUser.password;
 
+    setCookie(res, newUser);
+
     res.status(201).json({
       success: true,
       message: "User created successfully",
@@ -66,3 +76,18 @@ exports.signup = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.logout = async (req, res, next) => {
+  res.clearCookie("token", cookieOptions);
+
+  res.status(200).json({
+    success: true,
+    message: "User logged out successfully",
+  });
+};
+
+function setCookie(res, user) {
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+
+  res.cookie("token", token, cookieOptions);
+}

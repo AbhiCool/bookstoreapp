@@ -3,9 +3,9 @@ import Card from "../components/Card";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
-import axios from "axios";
 import { serverURL } from "../utils/constants";
 import SkeletonCard from "../components/SkeletonCard";
+import axiosInstance from "../utils/axiosInstance";
 
 const Course = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const Course = () => {
     const fetchBooks = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(serverURL + "/api/book");
+        const res = await axiosInstance.get("/api/book");
 
         setBooks(res.data);
       } catch (err) {
@@ -68,7 +68,7 @@ const Course = () => {
       {!books.length ? (
         <h1 className="text-center text-2xl mt-10">No books found</h1>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-center justify-center gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-center justify-center gap-2">
           {books.map((book) => (
             <Card key={book.id} book={book}></Card>
           ))}
