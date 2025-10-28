@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://bookstoreapp-jt4p.onrender.com"],
+    origin: ["http://localhost:5173", "https://bookstoreapp-lake.vercel.app"],
     credentials: true,
   })
 );
